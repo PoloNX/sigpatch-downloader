@@ -1,11 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <dirent.h>
-#include <minizip/unzip.h> 
+#include <unzipper.h> 
 #include <switch.h>
+#include <iostream>
 
-
+using namespace std;
 class unzipRequests 
 {
     public:

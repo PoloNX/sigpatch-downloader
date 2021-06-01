@@ -16,7 +16,7 @@
 #include <vector>
 #include <curl/curl.h>
 
-#include "../Include/download.hpp"
+#include "../include/download.hpp"
 
 #define Megabytes_in_Bytes	1048576
 #define Kibibyte_in_Bytes	1024
@@ -146,7 +146,7 @@ int mkdirMod(const char *path)
     DIR* dir;
     struct dirent* ent;
     //dir = opendir("/switch");
-    //mkdirMod("sigtest/");
+    mkdirMod("sigtest/");
     //dir = opendir("sigtest/");
     std::cout << "Dir-listing for 'newfolder': " << std::endl;
             while ((ent = readdir(dir)))
@@ -155,7 +155,7 @@ int mkdirMod(const char *path)
                 std::cout << "dans le while" << std::endl;
             }
             closedir(dir);
-    //chdir("sigtest/");
+    chdir("sigtest/");
     //dir = opendir("");
     std::cout << "avant file" << std::endl;
     

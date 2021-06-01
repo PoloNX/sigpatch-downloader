@@ -10,7 +10,7 @@
 
 #define largeur 1280
 #define longueur 720
-CurlRequests *sessionCurl = new CurlRequests;
+
 
 int main()
 {
@@ -104,11 +104,15 @@ int main()
 
                 if (event.jbutton.button == 0 && choice == 0)   //Button A and cursor on fusee
                 {
+                    CurlRequests *sessionCurl = new CurlRequests;                    
                     sessionCurl->downloadFile("patch.zip");
+                    unzipRequests  *sessionUnzip = new unzipRequests;
+                    sessionUnzip->unzipPatches();
                 }
 
                 if (event.jbutton.button == 0 && choice == 1)   //Button A and cursor on hekate
                 {
+                    CurlRequests *sessionCurl = new CurlRequests;
                     sessionCurl->downloadFile("patch.zip");
                 }
             }
