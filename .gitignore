@@ -1,0 +1,11 @@
+sigpatch-downloader.nacp
+sigpatch-downloader.nro
+build/download.d
+build/download.o
+build/main.d
+build/main.o
+build/sigpatch-downloader.lst
+build/sigpatch-downloader.map
+build/unzip.d
+build/unzip.o
+sigpatch-downloader.elf

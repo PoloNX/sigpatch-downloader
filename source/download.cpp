@@ -141,7 +141,7 @@ int mkdirMod(const char *path)
         return 0;
     }
 
- bool CurlRequests::downloadFile(const char *filename)
+ bool CurlRequests::downloadFile(const char *filename, const char *urlPatches)
 {
     DIR* dir;
     struct dirent* ent;
@@ -171,7 +171,7 @@ int mkdirMod(const char *path)
         if (dest == NULL) {
             perror("fopen");
         } else {
-            curl_easy_setopt(curl, CURLOPT_URL, "https://github.com/THZoria/patches/releases/latest/download/fusee.zip");
+            curl_easy_setopt(curl, CURLOPT_URL, urlPatches);
             curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0");// getting URL from char *url
             curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
             curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);// useful for debugging

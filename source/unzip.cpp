@@ -7,6 +7,7 @@ unzipRequests::unzipRequests(void){
 
 bool unzipRequests::unzipPatches()
 {
+    chdir ("sdmc:/");
     unzFile zfile = unzOpen("patch.zip"); //Choose the file
     unz_global_info gi = {0};
     unzGetGlobalInfo(zfile, &gi);
