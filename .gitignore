@@ -9,3 +9,4 @@ build/sigpatch-downloader.map
 build/unzip.d
 build/unzip.o
 sigpatch-downloader.elf
+.vscode/c_cpp_properties.json
