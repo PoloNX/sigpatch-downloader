@@ -43,9 +43,9 @@ APP_VERSION := 	0.0.1-beta
 
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source libs/minizip/source
+SOURCES		:=	source
 DATA		:=	data
-INCLUDES	:=	include libs/minizip/include
+INCLUDES	:=	Include
 ROMFS		:=	romfs
 
 #---------------------------------------------------------------------------------
