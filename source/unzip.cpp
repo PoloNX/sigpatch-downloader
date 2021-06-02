@@ -5,7 +5,7 @@
 unzipRequests::unzipRequests(void){
 }
 
-bool unzipPatches()
+bool unzipRequests::unzipPatches()
 {
     unzFile zfile = unzOpen("patch.zip"); //Choose the file
     unz_global_info gi = {0};

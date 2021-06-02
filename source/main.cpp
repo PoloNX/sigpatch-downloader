@@ -100,8 +100,8 @@ int main()
                     CurlRequests *sessionCurl = new CurlRequests;                    
                     sessionCurl->downloadFile("patch.zip");
                     
-                    /*unzipRequests *sessionUnzip = new unzipRequests;
-                    sessionUnzip->unzipPatches();*/
+                    unzipRequests *sessionUnzip = new unzipRequests;
+                    sessionUnzip->unzipPatches();
                 }
 
                 if (event.jbutton.button == 0 && choice == 1)   //Button A and cursor on hekate
