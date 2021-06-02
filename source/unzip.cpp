@@ -57,7 +57,6 @@ bool unzipRequests::unzipPatches()
     unzClose(zfile);
     remove("patch.zip");
     
-    printf("\nfinished!\n\nRemember to reboot for the patches to be loaded!\n");
     consoleUpdate(NULL);
 
     return true;
