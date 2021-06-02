@@ -145,18 +145,12 @@ int mkdirMod(const char *path)
 {
     DIR* dir;
     struct dirent* ent;
-    //dir = opendir("/switch");
-    mkdirMod("sigtest/");
-    //dir = opendir("sigtest/");
-    std::cout << "Dir-listing for 'newfolder': " << std::endl;
             while ((ent = readdir(dir)))
             {
                 std::cout <<  ent->d_name << std::endl;
                 std::cout << "dans le while" << std::endl;
             }
             closedir(dir);
-    chdir("sigtest/");
-    //dir = opendir("");
     std::cout << "avant file" << std::endl;
     
     FILE				*dest = NULL;
