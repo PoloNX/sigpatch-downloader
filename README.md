@@ -2,7 +2,8 @@
 Sigpatch Updater is an homebrew for Nintendo Switch which download sigpatchs.
 
 # Screenshot
-https://raw.githubusercontent.com/PoloNX/sigpatch-downloader/main/screenshots/image.jpg
+
+ ![Alt Text](https://raw.githubusercontent.com/PoloNX/sigpatch-downloader/main/screenshots/image.jpg)
 
 # How to build
 
