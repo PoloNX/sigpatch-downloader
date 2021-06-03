@@ -39,7 +39,7 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 APP_TITLE   := 	Sigpatch-Downloader
 APP_AUTHOR  := 	PoloNX
-APP_VERSION := 	0.0.1-beta
+APP_VERSION := 	1.0.0
 
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
