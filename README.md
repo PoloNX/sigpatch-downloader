@@ -23,3 +23,6 @@ Zoria and Murasaki for my mental health.
 
 This project use the license ``GPL-3.0 License`` - check the file [LICENSE.md](LICENSE.md) for more information.
 
+
+ps : If you want a beta-version you can build the project.
+
