@@ -21,8 +21,7 @@ Zoria and Murasaki for my mental health.
 
 # License
 
-This project use the license ``GPL-3.0 License`` - check the file [LICENSE.md](LICENSE.md) for more information.
-
+This project use the license ``GPL-3.0 License`` - check the file [LICENSE](https://github.com/PoloNX/sigpatch-downloader/blob/main/LICENSE) for more information.
 
 ps : If you want a beta-version you can build the project.
 
