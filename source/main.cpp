@@ -108,7 +108,7 @@ int main()
     SDL_Rect rect_cursorApp;
     rect_cursorApp.w = sigpatch_fusee_s->w + 50;
     rect_cursorApp.h = sigpatch_fusee_s->h + 20;
-    rect_cursorApp.x = largeur / 2 - rect_updateApp.w / 2 - 100;
+    rect_cursorApp.x = largeur / 2 - rect_updateApp.w / 2 - 50;
     rect_cursorApp.y = longueur - 210;
 
     SDL_Rect rect_title;	//Rect title
@@ -162,12 +162,12 @@ int main()
 
         SDL_SetRenderDrawColor(mainRenderer, 45, 45, 45, 255);  //Render Color (grey)
 
-        if (choice == 3)
+        if (choice >= 3)
         {
             choice = 0;
         }
 
-        if (choice == -1)
+        if (choice <= -1)
         {
             choice = 2;
         }
@@ -199,32 +199,32 @@ int main()
                 {
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
                     CurlRequests *sessionCurl = new CurlRequests;                    
-                    sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/fusee.zip");
+                    sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/fusee.zip", false);
                     
                     unzipRequests *sessionUnzip = new unzipRequests;
                     sessionUnzip->unzipPatches();
                     downloadIsFinish = 1;
                 }
 
-                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on hekate
+                if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on hekate
                 {
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
+                    SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;
-                    sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/hekate.zip");
+                    sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/hekate.zip", false);
 
                     unzipRequests *sessionUnzip = new unzipRequests;
                     sessionUnzip->unzipPatches();
                     downloadIsFinish = 1;
                 }
                 
-                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on hekate
+                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on app
                 {
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
+                    SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;
-                    sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro");
+                    sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true);
 
-                    unzipRequests *sessionUnzip = new unzipRequests;
-                    sessionUnzip->unzipApp();
                     downloadIsFinish = 1;
                 }
             }
@@ -258,7 +258,7 @@ int main()
             SDL_RenderDrawRect(mainRenderer, &rect_cursorApp);
         }
 
-        if (choice == 1 && downloadIsFinish == 0) //Draw cursor on hekate
+        if (choice == 2 && downloadIsFinish == 0) //Draw cursor on hekate
         {
             SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
             SDL_RenderDrawRect(mainRenderer, &rect_cursorHekate);

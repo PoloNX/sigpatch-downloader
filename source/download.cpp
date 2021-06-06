@@ -141,28 +141,30 @@ int mkdirMod(const char *path)
         return 0;
     }
 
- bool CurlRequests::downloadFile(const char *filename, const char *urlPatches)
+ bool CurlRequests::downloadFile(const char *filename, const char *urlPatches, bool appUpdater)
 {
     DIR* dir;
     struct dirent* ent;
+    if (appUpdater == true){    
+        chdir ("switch/");
+        mkdir ("sigpatch-downloader", 0);
+    }
             while ((ent = readdir(dir)))
             {
                 std::cout <<  ent->d_name << std::endl;
-                std::cout << "dans le while" << std::endl;
             }
             closedir(dir);
-    std::cout << "avant file" << std::endl;
+
+    if (appUpdater == true)
+        chdir ("switch/sigpatch-downloader/");
     
     FILE				*dest = NULL;
     CURL				*curl = NULL;
     CURLcode			res;
     struct myprogress	prog;
     curl_global_init(CURL_GLOBAL_DEFAULT);
-
-    std::cout << "avant curl easy init" << std::endl;
     
     curl = curl_easy_init();
-    const char *pathTopass = "https://github.com/THZoria/patches/releases/download/1.0.7/fusee.zip";
     if (curl) {
         prog.lastruntime = 0;
         prog.curl = curl;

@@ -15,7 +15,7 @@ class CurlRequests
         CurlRequests();
         
         //string returnDebug();
-        bool downloadFile(const char *filename, const char *urlPatches);
+        bool downloadFile(const char *filename, const char *urlPatches, bool appUpdate);
         int xferinfo(curl_off_t dltotal, curl_off_t dlnow);
 
 };
