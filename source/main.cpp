@@ -29,6 +29,7 @@ int main()
     TTF_Font* font_small = TTF_OpenFont("data/BerlinSansFB.ttf", 24);
     TTF_Font* font = TTF_OpenFont("data/BerlinSansFB.ttf", 48);    //font for text
     TTF_Font* font_big = TTF_OpenFont("data/BerlinSansFB.ttf", 72);    //font for title
+
     SDL_Window* mainWindow = SDL_CreateWindow("mainWindow", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, largeur, longueur, SDL_WINDOW_RESIZABLE);   //The window
     SDL_Renderer* mainRenderer = SDL_CreateRenderer(mainWindow, -1, 0); //The renderer
 
