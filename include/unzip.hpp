@@ -12,5 +12,6 @@ class unzipRequests
         unzipRequests();
 
         bool unzipPatches();
+        bool unzipApp();
 
 };

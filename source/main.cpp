@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include <switch.h>
 #include <string>
 #include <iostream>
@@ -31,10 +31,13 @@ int main()
     TTF_Font* font_big = TTF_OpenFont("data/BerlinSansFB.ttf", 72);    //font for title
 
     SDL_Window* mainWindow = SDL_CreateWindow("mainWindow", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, largeur, longueur, SDL_WINDOW_RESIZABLE);   //The window
-    SDL_Renderer* mainRenderer = SDL_CreateRenderer(mainWindow, -1, 0); //The renderer
+    SDL_Renderer* mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_SOFTWARE); //The renderer
 
     SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Fusee-Primary", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
+
+    SDL_Surface* updateApp_s = TTF_RenderText_Blended(font, "Update App", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
+    SDL_Texture* updateApp = SDL_CreateTextureFromSurface (mainRenderer, updateApp_s); //We convert the surface to texture
 
     SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 255, 255, 255}); //We create the option for hekate
     SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture
@@ -69,20 +72,20 @@ int main()
     SDL_Rect rect_cursorHekate;
     rect_cursorHekate.w = sigpatch_fusee_s->w + 50;
     rect_cursorHekate.h = sigpatch_fusee_s->h + 20;
-    rect_cursorHekate.x = 900;
+    rect_cursorHekate.x = 860;
     rect_cursorHekate.y = longueur - 210;
 
     SDL_Rect rect_amsLogo;
     rect_amsLogo.w = amsLogo_s->w;
     rect_amsLogo.h = amsLogo_s->h;
     rect_amsLogo.x = 0;
-    rect_amsLogo.y = 800;
+    rect_amsLogo.y = 150;
 
     SDL_Rect rect_hekateLogo;
     rect_hekateLogo.w = hekateLogo_s->w;
     rect_hekateLogo.h = hekateLogo_s->h;
-    rect_hekateLogo.x = largeur - 500;
-    rect_hekateLogo.y = 800;
+    rect_hekateLogo.x = 795;
+    rect_hekateLogo.y = 150;
     
     SDL_Rect rect_fusee;	//Rect AMS
     rect_fusee.w = sigpatch_fusee_s->w;
@@ -93,8 +96,20 @@ int main()
     SDL_Rect rect_hekate;	//Rect hekate
     rect_hekate.w = sigpatch_hekate_s->w;
     rect_hekate.h = sigpatch_hekate_s->h;
-    rect_hekate.x = 1000;
+    rect_hekate.x = 960;
     rect_hekate.y = longueur - 200;
+
+    SDL_Rect rect_updateApp;	//Rect hekate
+    rect_updateApp.w = updateApp_s->w;
+    rect_updateApp.h = updateApp_s->h;
+    rect_updateApp.x = largeur / 2 - rect_updateApp.w / 2;
+    rect_updateApp.y = longueur - 200;
+
+    SDL_Rect rect_cursorApp;
+    rect_cursorApp.w = sigpatch_fusee_s->w + 50;
+    rect_cursorApp.h = sigpatch_fusee_s->h + 20;
+    rect_cursorApp.x = largeur / 2 - rect_updateApp.w / 2 - 100;
+    rect_cursorApp.y = longueur - 210;
 
     SDL_Rect rect_title;	//Rect title
     rect_title.w = title_s->w;
@@ -147,14 +162,14 @@ int main()
 
         SDL_SetRenderDrawColor(mainRenderer, 45, 45, 45, 255);  //Render Color (grey)
 
-        if (choice == 2)
+        if (choice == 3)
         {
             choice = 0;
         }
 
         if (choice == -1)
         {
-            choice = 1;
+            choice = 2;
         }
       
         SDL_RenderClear(mainRenderer);  //We clear the screen
@@ -201,6 +216,17 @@ int main()
                     sessionUnzip->unzipPatches();
                     downloadIsFinish = 1;
                 }
+                
+                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on hekate
+                {
+                    SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
+                    CurlRequests *sessionCurl = new CurlRequests;
+                    sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro");
+
+                    unzipRequests *sessionUnzip = new unzipRequests;
+                    sessionUnzip->unzipApp();
+                    downloadIsFinish = 1;
+                }
             }
         }
 
@@ -214,6 +240,7 @@ int main()
             SDL_RenderCopy(mainRenderer, credit, NULL, &rect_credit);
             SDL_RenderCopy(mainRenderer, hekateLogo, NULL, &rect_hekateLogo);
             SDL_RenderCopy(mainRenderer, amsLogo, NULL, &rect_amsLogo);
+            SDL_RenderCopy(mainRenderer, updateApp, NULL, &rect_updateApp);
         }
         else if (downloadIsFinish == 1){
             SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
@@ -223,6 +250,12 @@ int main()
         {
             SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
             SDL_RenderDrawRect(mainRenderer, &rect_cursorAms);
+        }
+
+        if (choice == 1 && downloadIsFinish == 0) //Draw cursor on hekate
+        {
+            SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
+            SDL_RenderDrawRect(mainRenderer, &rect_cursorApp);
         }
 
         if (choice == 1 && downloadIsFinish == 0) //Draw cursor on hekate
