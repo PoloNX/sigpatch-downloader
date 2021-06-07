@@ -1,12 +1,18 @@
-#include "reboot.h"
+#include "../Include/reboot.hpp"
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <iostream>
 
-#define IRAM_PAYLOAD_MAX_SIZE   0x2F000
-#define IRAM_PAYLOAD_BASE       0x40010000
+#include </opt/devkitpro/libnx/include/switch.h>
 
-static alignas(0x1000) u8 g_reboot_payload[IRAM_PAYLOAD_MAX_SIZE];
-static alignas(0x1000) u8 g_ff_page[0x1000];
-static alignas(0x1000) u8 g_work_page[0x1000];
 
+#define IRAM_PAYLOAD_MAX_SIZE 0x2F000
+#define IRAM_PAYLOAD_BASE 0x40010000
+
+ alignas(0x1000) u8 g_reboot_payload[IRAM_PAYLOAD_MAX_SIZE];
+ alignas(0x1000) u8 g_ff_page[0x1000];
+ alignas(0x1000) u8 g_work_page[0x1000];
 
 void do_iram_dram_copy(void *buf, uintptr_t iram_addr, size_t size, int option) {
     memcpy(g_work_page, buf, size);
@@ -18,7 +24,7 @@ void do_iram_dram_copy(void *buf, uintptr_t iram_addr, size_t size, int option) 
     args.X[3] = size;                   /* Copy size */
     args.X[4] = option;                 /* 0 = Read, 1 = Write */
     svcCallSecureMonitor(&args);
-    
+
     memcpy(buf, g_work_page, size);
 }
 
@@ -37,33 +43,26 @@ static void clear_iram(void) {
     }
 }
 
-static void inject_payload(void) {
+static void reboot_to_payload(void) {
     clear_iram();
-    
+
     for (size_t i = 0; i < IRAM_PAYLOAD_MAX_SIZE; i += 0x1000) {
         copy_to_iram(IRAM_PAYLOAD_BASE + i, &g_reboot_payload[i], 0x1000);
     }
-    
+
     splSetConfig((SplConfigItem)65001, 2);
 }
 
-int reboot_to_payload(const char* path){
-    bool can_reboot = true;
-    FILE *f;
-    f = fopen(path, "rb");
-    if (f == NULL) can_reboot = false;
-    else {
-        printf("Can't open payload");
-        fread(g_reboot_payload, 1, sizeof(g_reboot_payload), f);
-        fclose(f);
+reboot::reboot()
+{
+    Result rc = splInitialize();
+    FILE *f = fopen("sdmc:/payload.bin", "rb");
+    if (f == NULL) {
+        std::cout << "Payload not found" << std::endl;
     }
 
-    if (can_reboot) {
-        printf("injecting payload");
-        inject_payload();
-    }
-    if (can_reboot)
-        splExit();
+    fread(g_reboot_payload, 1, sizeof(g_reboot_payload), f);
+    fclose(f);
 
-    return 0;
+    reboot_to_payload();
 }

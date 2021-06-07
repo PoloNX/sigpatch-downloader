@@ -5,13 +5,17 @@
 #include <string>
 #include <iostream>
 #include <curl/curl.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 #include "../Include/download.hpp"
 #include "../Include/unzip.hpp"
-#include "../Include/reboot.h"
+#include "../Include/reboot.hpp"
 
 #define largeur 1280
 #define longueur 720
+
 int main()
 {
     socketInitializeDefault();
@@ -199,6 +203,18 @@ int main()
                     isOpen = false;
                     break;
                 }
+                
+                else if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
+                {
+                    std::cout << "dans reboot" << std::endl;
+                    reboot *sessionReboot = new reboot();   
+                }
+
+                else if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
+                {
+                    std::cout << "dans reboot" << std::endl;                    
+                    reboot *sessionReboot = new reboot();   
+                }
 
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 0)   //Button A and cursor on fusee
                 {
@@ -232,16 +248,6 @@ int main()
                     sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true);
 
                     downloadIsFinish = 1;
-                }
-
-                if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
-                {
-                    reboot_to_payload("sdmc:/atmosphere/reboot_payload.bin");
-                }
-
-                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
-                {
-                    reboot_to_payload("sdmc:/hekate_ctcaer_5.5.6.bin");
                 }
             }
         }
