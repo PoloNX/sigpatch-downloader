@@ -8,6 +8,7 @@
 
 #include "../Include/download.hpp"
 #include "../Include/unzip.hpp"
+#include "../Include/reboot.h"
 
 #define largeur 1280
 #define longueur 720
@@ -164,6 +165,11 @@ int main()
         {
             choice = 0;
         }
+        if (downloadIsFinish == 1 && choice >= 2)
+        {
+            choice = 0;
+        }
+        
 
         if (choice <= -1)
         {
@@ -197,6 +203,7 @@ int main()
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 0)   //Button A and cursor on fusee
                 {
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
+                    SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;                    
                     sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/fusee.zip", false);
                     
@@ -226,6 +233,16 @@ int main()
 
                     downloadIsFinish = 1;
                 }
+
+                if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
+                {
+                    reboot_to_payload("sdmc:/atmosphere/reboot_payload.bin");
+                }
+
+                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
+                {
+                    reboot_to_payload("sdmc:/hekate_ctcaer_5.5.6.bin");
+                }
             }
         }
 
@@ -240,21 +257,33 @@ int main()
             SDL_RenderCopy(mainRenderer, hekateLogo, NULL, &rect_hekateLogo);
             SDL_RenderCopy(mainRenderer, amsLogo, NULL, &rect_amsLogo);
             SDL_RenderCopy(mainRenderer, updateApp, NULL, &rect_updateApp);
+
         }
         else if (downloadIsFinish == 1){
             SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
+            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_hekate);
+            SDL_RenderCopy(mainRenderer, sigpatch_fusee, NULL, &rect_fusee);
         }
 
-        if (choice == 0 && downloadIsFinish == 0) //Draw cursor on fusee
+        if (choice == 0) //Draw cursor on fusee
         {
             SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
             SDL_RenderDrawRect(mainRenderer, &rect_cursorAms);
         }
 
-        if (choice == 1 && downloadIsFinish == 0) //Draw cursor on hekate
+        if (choice == 1) //Draw cursor on hekate
         {
-            SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
-            SDL_RenderDrawRect(mainRenderer, &rect_cursorApp);
+            if (downloadIsFinish == 0)
+            {
+                SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
+                SDL_RenderDrawRect(mainRenderer, &rect_cursorApp);
+            }
+
+            if (downloadIsFinish == 1)
+            {
+                SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
+                SDL_RenderDrawRect(mainRenderer, &rect_cursorHekate);
+            }
         }
 
         if (choice == 2 && downloadIsFinish == 0) //Draw cursor on app

@@ -188,8 +188,6 @@ int mkdirMod(const char *path)
 
             res = curl_easy_perform(curl);	// perform tasks curl_easy_setopt asked before
 
-            std::cout << "download finis" << std::endl;
-
             fclose(dest);
         }
     }

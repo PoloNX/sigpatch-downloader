@@ -14,3 +14,5 @@ romfs/data/fusee.bmp
 .gitignore
 romfs/data/switch.png
 romfs/data/hekate.bmp
+build/reboot.d
+build/reboot.o
