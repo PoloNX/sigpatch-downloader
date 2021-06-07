@@ -155,8 +155,6 @@ int main()
     SDL_Event event;	//Event
     chdir("sdmc:/");    //Go in the sdmc
 
-    std::cout << "avant while" << std::endl;
-
     while (isOpen && appletMainLoop())
     {
 
@@ -190,9 +188,10 @@ int main()
                     --choice;
                 }
 
-                if (event.jbutton.button == 10)
+                if (event.jbutton.button == 10) // +
                 {
                     isOpen = false;
+                    break;
                 }
 
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 0)   //Button A and cursor on fusee
@@ -258,7 +257,7 @@ int main()
             SDL_RenderDrawRect(mainRenderer, &rect_cursorApp);
         }
 
-        if (choice == 2 && downloadIsFinish == 0) //Draw cursor on hekate
+        if (choice == 2 && downloadIsFinish == 0) //Draw cursor on app
         {
             SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
             SDL_RenderDrawRect(mainRenderer, &rect_cursorHekate);
@@ -268,16 +267,6 @@ int main()
 
     }
 
-    SDL_DestroyTexture(sigpatch_fusee);
-    SDL_DestroyTexture(sigpatch_hekate);
-    SDL_DestroyTexture(title);
-    SDL_DestroyTexture(description);
-    SDL_DestroyTexture(credit);
-    SDL_DestroyTexture(downloadEnd);
-    SDL_DestroyTexture(download);
-    TTF_Quit();
-    IMG_Quit();
     SDL_Quit(); //Quit
-    romfsExit();
     return 0;
 }

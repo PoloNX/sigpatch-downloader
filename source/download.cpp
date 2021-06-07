@@ -147,7 +147,7 @@ int mkdirMod(const char *path)
     struct dirent* ent;
     if (appUpdater == true){    
         chdir ("switch/");
-        mkdir ("sigpatch-downloader", 0);
+        mkdirMod ("sigpatch-downloader");
     }
             while ((ent = readdir(dir)))
             {
@@ -156,7 +156,7 @@ int mkdirMod(const char *path)
             closedir(dir);
 
     if (appUpdater == true)
-        chdir ("switch/sigpatch-downloader/");
+        chdir ("sigpatch-downloader/");
     
     FILE				*dest = NULL;
     CURL				*curl = NULL;
