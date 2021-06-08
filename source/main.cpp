@@ -41,19 +41,22 @@ int main()
     SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Fusee-Primary", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
 
+    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 0, 0, 255}); //We create the option for fusee_primary
+    SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture   
+
     SDL_Surface* updateApp_s = TTF_RenderText_Blended(font, "Update App", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* updateApp = SDL_CreateTextureFromSurface (mainRenderer, updateApp_s); //We convert the surface to texture
 
-    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 255, 255, 255}); //We create the option for hekate
-    SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture
-
+    SDL_Surface* exit_s = TTF_RenderText_Blended(font, "Exit", SDL_Color {255, 0, 0, 255}); //We create the option for fusee_primary
+    SDL_Texture* exit = SDL_CreateTextureFromSurface (mainRenderer, exit_s); //We convert the surface to texture   
+    
     SDL_Surface* title_s = TTF_RenderText_Blended(font_big, "SigPatch Downloader", SDL_Color {255, 255, 255, 255}); //We create the title
     SDL_Texture* title = SDL_CreateTextureFromSurface (mainRenderer, title_s); //We convert the surface to texture
 
     SDL_Surface* description_s = TTF_RenderText_Blended(font, "Download sigpatch on your Switch.", SDL_Color {255, 255, 255, 255}); //We create the option for hekate
     SDL_Texture* description = SDL_CreateTextureFromSurface (mainRenderer, description_s); //We convert the surface to texture   
 
-    SDL_Surface* credit_s = TTF_RenderText_Blended(font_small, "By PoloNX", SDL_Color {255, 255, 255, 255}); //We create the option for hekate
+    SDL_Surface* credit_s = TTF_RenderText_Blended(font_small, "By PoloNX", SDL_Color {255, 0, 0, 255}); //We create the option for hekate
     SDL_Texture* credit = SDL_CreateTextureFromSurface (mainRenderer, credit_s); //We convert the surface to texture 
 
     SDL_Surface* download_s = TTF_RenderText_Blended(font, "Download starting...", SDL_Color {255, 0, 0, 255}); //We create the title
@@ -204,16 +207,14 @@ int main()
                     break;
                 }
                 
-                else if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
+                if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
                 {
-                    std::cout << "dans reboot" << std::endl;
                     reboot *sessionReboot = new reboot();   
                 }
 
-                else if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
-                {
-                    std::cout << "dans reboot" << std::endl;                    
-                    reboot *sessionReboot = new reboot();   
+                if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
+                {                  
+                    isOpen = false;
                 }
 
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 0)   //Button A and cursor on fusee
@@ -267,8 +268,8 @@ int main()
         }
         else if (downloadIsFinish == 1){
             SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
-            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_hekate);
-            SDL_RenderCopy(mainRenderer, sigpatch_fusee, NULL, &rect_fusee);
+            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_fusee);
+            SDL_RenderCopy(mainRenderer, exit, NULL, &rect_hekate);
         }
 
         if (choice == 0) //Draw cursor on fusee

@@ -54,9 +54,9 @@ static void reboot_to_payload(void) {
 }
 
 reboot::reboot()
-{
+{  
     Result rc = splInitialize();
-    FILE *f = fopen("sdmc:/payload.bin", "rb");
+    FILE *f = fopen("romfs:/data/hekate.bin", "rb");
     if (f == NULL) {
         std::cout << "Payload not found" << std::endl;
     }
