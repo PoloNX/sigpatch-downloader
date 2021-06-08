@@ -16,12 +16,23 @@
 #define largeur 1280
 #define longueur 720
 
+void destructTexture (SDL_Texture *sigpatch_fusee, SDL_Texture* updateApp, SDL_Texture* title, SDL_Texture* description, SDL_Texture* credit, SDL_Texture* amsLogo, SDL_Texture* hekateLogo )
+{
+    SDL_DestroyTexture(sigpatch_fusee);
+    SDL_DestroyTexture(updateApp);
+    SDL_DestroyTexture(title);
+    SDL_DestroyTexture(description);
+    SDL_DestroyTexture(credit);
+    SDL_DestroyTexture(amsLogo);
+    SDL_DestroyTexture(hekateLogo);
+}
+
 int main()
 {
     socketInitializeDefault();
     nxlinkStdio();  //redirect cout/cer to tcp
     
-    SDL_Init(SDL_INIT_EVERYTHING);  //Init for SDL2
+    SDL_Init(SDL_INIT_VIDEO);  //Init for SDL2
     IMG_Init(IMG_INIT_PNG);
     TTF_Init(); //Init for SDL_ttf
     SDL_InitSubSystem(SDL_INIT_EVERYTHING); //Some init 
@@ -41,7 +52,7 @@ int main()
     SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Fusee-Primary", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
 
-    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 0, 0, 255}); //We create the option for fusee_primary
+    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture   
 
     SDL_Surface* updateApp_s = TTF_RenderText_Blended(font, "Update App", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
@@ -101,6 +112,12 @@ int main()
     rect_fusee.x = 100;
     rect_fusee.y = longueur - 200;
 
+    SDL_Rect rect_exit;	//Rect AMS
+    rect_exit.w = exit_s->w;
+    rect_exit.h = exit_s->h;
+    rect_exit.x = 200;
+    rect_exit.y = longueur - 200;
+
     SDL_Rect rect_hekate;	//Rect hekate
     rect_hekate.w = sigpatch_hekate_s->w;
     rect_hekate.h = sigpatch_hekate_s->h;
@@ -156,6 +173,10 @@ int main()
     SDL_FreeSurface(credit_s);
     SDL_FreeSurface(download_s);
     SDL_FreeSurface(downloadEnd_s);
+    SDL_FreeSurface(exit_s);
+    SDL_FreeSurface(hekateLogo_s);
+    SDL_FreeSurface(amsLogo_s);
+    SDL_FreeSurface(updateApp_s);
 
     bool isOpen = true;		//mainLoop
     int choice = 0;		//Choice for cursor
@@ -203,18 +224,17 @@ int main()
 
                 if (event.jbutton.button == 10) // +
                 {
-                    isOpen = false;
-                    break;
+                    isOpen = false;                  
                 }
                 
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
                 {
-                    reboot *sessionReboot = new reboot();   
+                    isOpen = false;
                 }
 
                 if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
                 {                  
-                    isOpen = false;
+                    reboot *sessionReboot = new reboot(); 
                 }
 
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 0)   //Button A and cursor on fusee
@@ -227,6 +247,7 @@ int main()
                     unzipRequests *sessionUnzip = new unzipRequests;
                     sessionUnzip->unzipPatches();
                     downloadIsFinish = 1;
+                    destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
                 }
 
                 if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on hekate
@@ -239,6 +260,7 @@ int main()
                     unzipRequests *sessionUnzip = new unzipRequests;
                     sessionUnzip->unzipPatches();
                     downloadIsFinish = 1;
+                    destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
                 }
                 
                 if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on app
@@ -249,6 +271,7 @@ int main()
                     sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true);
 
                     downloadIsFinish = 1;
+                    destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
                 }
             }
         }
@@ -268,8 +291,8 @@ int main()
         }
         else if (downloadIsFinish == 1){
             SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
-            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_fusee);
-            SDL_RenderCopy(mainRenderer, exit, NULL, &rect_hekate);
+            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_hekate);
+            SDL_RenderCopy(mainRenderer, exit, NULL, &rect_exit);
         }
 
         if (choice == 0) //Draw cursor on fusee
@@ -303,6 +326,13 @@ int main()
 
     }
 
+    SDL_DestroyTexture(downloadEnd);
+    SDL_DestroyTexture(exit);
+    SDL_DestroyTexture(sigpatch_hekate);
+    TTF_Quit();
+    IMG_Quit();
     SDL_Quit(); //Quit
+    romfsExit();
+
     return 0;
 }
