@@ -19,7 +19,7 @@ command : ``sudo dkp-pacman -S switch-SDL2 switch-SDL2_ttf switch-SDL2_image swi
 # Credits
 Zoria for your patches : https://github.com/THZoria/patches/  
 B&nder for your help with cURL.  
-Zoria and Murasaki for my mental health.
+Chronoss for the ui/ux.
 
 # License
 
