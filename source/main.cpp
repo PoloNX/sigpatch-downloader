@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <cstdlib>
 
 #include "../Include/download.hpp"
 #include "../Include/unzip.hpp"
@@ -178,13 +179,13 @@ int main()
     SDL_FreeSurface(amsLogo_s);
     SDL_FreeSurface(updateApp_s);
 
-    bool isOpen = true;		//mainLoop
+    int exit_requested = 0;		//mainLoop
     int choice = 0;		//Choice for cursor
     int downloadIsFinish = 0;
     SDL_Event event;	//Event
     chdir("sdmc:/");    //Go in the sdmc
 
-    while (isOpen && appletMainLoop())
+    while (!exit_requested && appletMainLoop())
     {
 
         SDL_SetRenderDrawColor(mainRenderer, 45, 45, 45, 255);  //Render Color (grey)
@@ -208,7 +209,7 @@ int main()
 
         while(SDL_PollEvent(&event)){   //Events
             if (event.type == SDL_QUIT)
-                isOpen = false;
+                exit_requested = 1;
             
             if (event.type == SDL_JOYBUTTONDOWN)    //Pressed key
             {
@@ -224,12 +225,12 @@ int main()
 
                 if (event.jbutton.button == 10) // +
                 {
-                    isOpen = false;                  
+                    exit_requested = 1;             
                 }
                 
                 if (event.jbutton.button == 0 && choice == 0 && downloadIsFinish == 1)
                 {
-                    isOpen = false;
+                    exit_requested = 1;
                 }
 
                 if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 1)
@@ -333,6 +334,6 @@ int main()
     IMG_Quit();
     SDL_Quit(); //Quit
     romfsExit();
-
-    return 0;
+    socketExit();
+    return EXIT_SUCCESS;
 }
