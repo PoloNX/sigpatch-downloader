@@ -3,7 +3,7 @@ Sigpatch Updater is an homebrew for Nintendo Switch which download sigpatchs.
 
 # Screenshot
 
- ![Alt Text](https://raw.githubusercontent.com/PoloNX/sigpatch-downloader/main/screenshots/image.jpg)
+ ![Alt Text](https://raw.githubusercontent.com/PoloNX/sigpatch-downloader/main/screenshots/screenshot.jpg)
 
 # How to build
 
@@ -24,4 +24,5 @@ Zoria and Murasaki for my mental health.
 This project use the license ``GPL-3.0 License`` - check the file [LICENSE](https://github.com/PoloNX/sigpatch-downloader/blob/main/LICENSE) for more information.
 
 ps : If you want a beta-version you can build the project.
+ps 2 : If you have any issue open one issue on the github.
 
