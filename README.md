@@ -7,12 +7,14 @@ Sigpatch Updater is an homebrew for Nintendo Switch which download sigpatchs.
 
 # How to build
 
-For build the project you have to install this :  
+To build the project you have to install this :  
 - switch-SDL2
 - switch-SDL2_ttf
 - switch-SDL2_image
 - switch-curl
 - switch-zlib
+
+command : ``sudo dkp-pacman -S switch-SDL2 switch-SDL2_ttf switch-SDL2_image switch-curl switch-zlib
 
 # Credits
 Zoria for your patches : https://github.com/THZoria/patches/  
