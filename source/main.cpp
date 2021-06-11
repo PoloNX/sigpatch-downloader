@@ -53,7 +53,7 @@ int main()
     SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Fusee-Primary", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
 
-    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
+    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Reboot", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture   
 
     SDL_Surface* updateApp_s = TTF_RenderText_Blended(font, "Update App", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
@@ -77,12 +77,21 @@ int main()
     SDL_Surface* downloadEnd_s = TTF_RenderText_Blended(font, "Download finish. please reboot the Nintendo Switch", SDL_Color {0, 0, 255, 255}); //We create the title
     SDL_Texture* downloadEnd = SDL_CreateTextureFromSurface (mainRenderer, downloadEnd_s); //We convert the surface to texture
 
+    SDL_Surface* error_s = TTF_RenderText_Blended(font, "Error, enable internet please.", SDL_Color {255, 0, 0, 255}); //We create the title
+    SDL_Texture* error = SDL_CreateTextureFromSurface (mainRenderer, error_s); //We convert the surface to texture
+
     SDL_Surface* amsLogo_s = IMG_Load("data/fusee.png");
     SDL_Texture* amsLogo = SDL_CreateTextureFromSurface(mainRenderer, amsLogo_s);
 
     SDL_Surface* hekateLogo_s = IMG_Load("data/hekate.png");
     SDL_Texture* hekateLogo = SDL_CreateTextureFromSurface(mainRenderer, hekateLogo_s); 
 
+    SDL_Rect rect_error;
+    rect_error.w = error_s->w;
+    rect_error.h = error_s->h;
+    rect_error.x = largeur / 2 - rect_error.w / 2;
+    rect_error.y = longueur / 2 - rect_error.h / 2;
+    
     SDL_Rect rect_cursorAms;
     rect_cursorAms.w = sigpatch_fusee_s->w + 50;
     rect_cursorAms.h = sigpatch_fusee_s->h + 20;
@@ -243,12 +252,18 @@ int main()
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;                    
-                    sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/fusee.zip", false);
+                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/fusee.zip", false) == false)
+                    {
+                        downloadIsFinish = 2;
+                    }
                     
-                    unzipRequests *sessionUnzip = new unzipRequests;
-                    sessionUnzip->unzipPatches();
-                    downloadIsFinish = 1;
-                    destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                    else
+                    {
+                        unzipRequests *sessionUnzip = new unzipRequests;
+                        sessionUnzip->unzipPatches();
+                        downloadIsFinish = 1;
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                    }
                 }
 
                 if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on hekate
@@ -256,12 +271,19 @@ int main()
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;
-                    sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/hekate.zip", false);
 
-                    unzipRequests *sessionUnzip = new unzipRequests;
-                    sessionUnzip->unzipPatches();
-                    downloadIsFinish = 1;
-                    destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/hekate.zip", false) == false)
+                    {
+                        downloadIsFinish = 2;
+                    }
+                    
+                    else
+                    {
+                        unzipRequests *sessionUnzip = new unzipRequests;
+                        sessionUnzip->unzipPatches();
+                        downloadIsFinish = 1;
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                    }
                 }
                 
                 if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on app
@@ -269,10 +291,17 @@ int main()
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;
-                    sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true);
 
-                    downloadIsFinish = 1;
-                    destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                    if (sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true) == false)
+                    {
+                        downloadIsFinish = 2;
+                    }  
+
+                    else
+                    {
+                        downloadIsFinish = 1;
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                    }
                 }
             }
         }
@@ -296,7 +325,12 @@ int main()
             SDL_RenderCopy(mainRenderer, exit, NULL, &rect_exit);
         }
 
-        if (choice == 0) //Draw cursor on fusee
+        else if (downloadIsFinish == 2)
+        {
+            SDL_RenderCopy(mainRenderer, error, NULL, &rect_error);
+        }
+
+        if (choice == 0 && (downloadIsFinish == 1 || downloadIsFinish == 0)) //Draw cursor on fusee
         {
             SDL_SetRenderDrawColor(mainRenderer, 123, 224, 228, 255);
             SDL_RenderDrawRect(mainRenderer, &rect_cursorAms);

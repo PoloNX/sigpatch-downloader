@@ -141,7 +141,7 @@ int mkdirMod(const char *path)
         return 0;
     }
 
- bool CurlRequests::downloadFile(const char *filename, const char *urlPatches, bool appUpdater)
+bool CurlRequests::downloadFile(const char *filename, const char *urlPatches, bool appUpdater)
 {
     DIR* dir;
     struct dirent* ent;
@@ -195,7 +195,6 @@ int mkdirMod(const char *path)
     curl_easy_cleanup(curl);												// Cleanup chunk data, resets functions.
     if (res != CURLE_OK) {
             std::cout << "erreur curl" << std::endl;
-            remove(filename);
             return false;
         }
 
