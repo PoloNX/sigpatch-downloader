@@ -201,6 +201,8 @@ bool CurlRequests::downloadFile(const char *filename, const char *urlPatches, bo
             std::cout << "erreur curl" << std::endl;
             return false;
         }
+    
+    rename ("temp.nro", "sigpatch-downloader.nro");
 
         return true;
 

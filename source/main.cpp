@@ -302,7 +302,7 @@ int main()
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;
 
-                    if (sessionCurl->downloadFile("sigpatch-downloader.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true) == false)
+                    if (sessionCurl->downloadFile("temp.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true) == false)
                     {
                         downloadIsFinish = 2;
                     }  
