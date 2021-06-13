@@ -194,6 +194,10 @@ bool CurlRequests::downloadFile(const char *filename, const char *urlPatches, bo
 
     curl_easy_cleanup(curl);												// Cleanup chunk data, resets functions.
     if (res != CURLE_OK) {
+            if (appUpdater == false)
+            {
+                remove(filename);
+            }
             std::cout << "erreur curl" << std::endl;
             return false;
         }
