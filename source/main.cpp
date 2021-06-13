@@ -1,3 +1,4 @@
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL_image.h>
@@ -53,8 +54,11 @@ int main()
     SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Fusee-Primary", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
 
-    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Reboot", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
+    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture   
+    
+    SDL_Surface* rebootPayload_s = TTF_RenderText_Blended(font, "Reboot", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
+    SDL_Texture* rebootPayload = SDL_CreateTextureFromSurface (mainRenderer, rebootPayload_s); //We convert the surface to texture   
 
     SDL_Surface* updateApp_s = TTF_RenderText_Blended(font, "Update App", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* updateApp = SDL_CreateTextureFromSurface (mainRenderer, updateApp_s); //We convert the surface to texture
@@ -86,6 +90,12 @@ int main()
     SDL_Surface* hekateLogo_s = IMG_Load("data/hekate.png");
     SDL_Texture* hekateLogo = SDL_CreateTextureFromSurface(mainRenderer, hekateLogo_s); 
 
+    SDL_Rect rect_reboot;
+    rect_reboot.w = rebootPayload_s->w;
+    rect_reboot.h = rebootPayload_s->h;
+    rect_reboot.x = 960;
+    rect_reboot.y = longueur - 200;
+    
     SDL_Rect rect_error;
     rect_error.w = error_s->w;
     rect_error.h = error_s->h;
@@ -321,7 +331,7 @@ int main()
         }
         else if (downloadIsFinish == 1){
             SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
-            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_hekate);
+            SDL_RenderCopy(mainRenderer, rebootPayload, NULL, &rect_reboot);
             SDL_RenderCopy(mainRenderer, exit, NULL, &rect_exit);
         }
 
