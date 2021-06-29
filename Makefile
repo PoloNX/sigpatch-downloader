@@ -23,7 +23,7 @@ ROMFS		:=	romfs
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	`$(PREFIX)pkg-config --cflags sdl2 SDL2_mixer SDL2_image` -g -Wall -O2 -ffunction-sections \
+ARCH	:=	`$(PREFIX)pkg-config --cflags sdl2 SDL2_image` -g -Wall -O2 -ffunction-sections \
 			-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 
 CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
@@ -36,7 +36,7 @@ CXXFLAGS	:= $(CFLAGS) -fexceptions -fno-rtti -fno-exceptions -std=gnu++17 -Wno-r
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lminizip -lmbedtls -lmbedx509 -lmbedcrypto -lstdc++fs -lz -lfreetype -lSDL2_mixer -lopusfile -lopus -lmodplug -lmpg123 -lvorbisidec -logg -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lSDL2 -lEGL -lGLESv2 -lglapi -ldrm_nouveau -lwebp -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lnx `curl-config --libs`
+LIBS	:= -lminizip -lstdc++fs -lz -lfreetype -lSDL2_ttf -lSDL2_gfx -lSDL2_image -lSDL2 -lEGL -lGLESv2 -lglapi -ldrm_nouveau -lwebp -lpng -ljpeg `sdl2-config --libs` `freetype-config --libs` -lnx `curl-config --libs`
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

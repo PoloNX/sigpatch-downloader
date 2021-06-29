@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <iostream>
 
-#include </opt/devkitpro/libnx/include/switch.h>
+#include <switch.h>
 
 
 #define IRAM_PAYLOAD_MAX_SIZE 0x2F000
