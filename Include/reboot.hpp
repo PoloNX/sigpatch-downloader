@@ -1,5 +1,0 @@
-class reboot
-{
-    public:
-        reboot();
-};
