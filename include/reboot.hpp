@@ -1,0 +1,5 @@
+class reboot
+{
+    public:
+        reboot();
+}; 
