@@ -11,9 +11,9 @@
 #include <stdbool.h>
 #include <cstdlib>
 
-#include "../Include/download.hpp"
-#include "../Include/unzip.hpp"
-#include "../Include/reboot.hpp"
+#include "../include/download.hpp"
+#include "../include/unzip.hpp"
+#include "../include/reboot.hpp"
 
 #define largeur 1280
 #define longueur 720

@@ -17,7 +17,7 @@ TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
-INCLUDES	:=	Include
+INCLUDES	:=	include
 ROMFS		:=	romfs
 
 #---------------------------------------------------------------------------------

@@ -16,7 +16,7 @@
 #include <vector>
 #include <curl/curl.h>
 
-#include "../Include/download.hpp"
+#include "../include/download.hpp"
 
 #define Megabytes_in_Bytes	1048576
 #define Kibibyte_in_Bytes	1024
