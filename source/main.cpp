@@ -11,9 +11,9 @@
 #include <stdbool.h>
 #include <cstdlib>
 
-#include "../include/download.hpp"
-#include "../include/unzip.hpp"
-#include "../include/reboot.hpp"
+#include <download.hpp>
+#include <unzip.hpp>
+#include <reboot.hpp>
 
 #define largeur 1280
 #define longueur 720
@@ -51,11 +51,11 @@ int main()
     SDL_Window* mainWindow = SDL_CreateWindow("mainWindow", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, largeur, longueur, SDL_WINDOW_RESIZABLE);   //The window
     SDL_Renderer* mainRenderer = SDL_CreateRenderer(mainWindow, -1, SDL_RENDERER_SOFTWARE); //The renderer
 
-    SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Fusee-Primary", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
+    SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Sigpatchs", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
 
-    SDL_Surface* sigpatch_hekate_s = TTF_RenderText_Blended(font, "Hekate", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
-    SDL_Texture* sigpatch_hekate = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_hekate_s); //We convert the surface to texture   
+    SDL_Surface* exit2_s = TTF_RenderText_Blended(font, "Exit", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
+    SDL_Texture* exit2 = SDL_CreateTextureFromSurface (mainRenderer, exit2_s); //We convert the surface to texture   
     
     SDL_Surface* rebootPayload_s = TTF_RenderText_Blended(font, "Reboot", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* rebootPayload = SDL_CreateTextureFromSurface (mainRenderer, rebootPayload_s); //We convert the surface to texture   
@@ -87,7 +87,7 @@ int main()
     SDL_Surface* amsLogo_s = IMG_Load("data/fusee.png");
     SDL_Texture* amsLogo = SDL_CreateTextureFromSurface(mainRenderer, amsLogo_s);
 
-    SDL_Surface* hekateLogo_s = IMG_Load("data/hekate.png");
+    SDL_Surface* hekateLogo_s = IMG_Load("data/exit.png");
     SDL_Texture* hekateLogo = SDL_CreateTextureFromSurface(mainRenderer, hekateLogo_s); 
 
     SDL_Rect rect_reboot;
@@ -138,11 +138,11 @@ int main()
     rect_exit.x = 200;
     rect_exit.y = longueur - 200;
 
-    SDL_Rect rect_hekate;	//Rect hekate
-    rect_hekate.w = sigpatch_hekate_s->w;
-    rect_hekate.h = sigpatch_hekate_s->h;
-    rect_hekate.x = 960;
-    rect_hekate.y = longueur - 200;
+    SDL_Rect rect_exit2;	//Rect exit
+    rect_exit2.w = exit2_s->w;
+    rect_exit2.h = exit2_s->h;
+    rect_exit2.x = 960;
+    rect_exit2.y = longueur - 200;
 
     SDL_Rect rect_updateApp;	//Rect hekate
     rect_updateApp.w = updateApp_s->w;
@@ -187,7 +187,7 @@ int main()
     rect_downloadEnd.y = longueur / 2 - rect_downloadEnd.h / 2;
 
     SDL_FreeSurface(sigpatch_fusee_s); //We Delete Surface
-    SDL_FreeSurface(sigpatch_hekate_s);
+    SDL_FreeSurface(exit2_s);
     SDL_FreeSurface(title_s);
     SDL_FreeSurface(description_s);
     SDL_FreeSurface(credit_s);
@@ -262,7 +262,7 @@ int main()
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;                    
-                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/fusee.zip", false) == false)
+                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/patches.zip", false) == false)
                     {
                         downloadIsFinish = 2;
                     }
@@ -276,24 +276,9 @@ int main()
                     }
                 }
 
-                if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on hekate
+                if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on exit
                 {
-                    SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
-                    SDL_RenderPresent(mainRenderer);
-                    CurlRequests *sessionCurl = new CurlRequests;
-
-                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/hekate.zip", false) == false)
-                    {
-                        downloadIsFinish = 2;
-                    }
-                    
-                    else
-                    {
-                        unzipRequests *sessionUnzip = new unzipRequests;
-                        sessionUnzip->unzipPatches();
-                        downloadIsFinish = 1;
-                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
-                    }
+                    exit_requested = 1;
                 }
                 
                 if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on app
@@ -320,7 +305,7 @@ int main()
         if (downloadIsFinish == 0){
             //render of text
             SDL_RenderCopy(mainRenderer, sigpatch_fusee, NULL, &rect_fusee); //print de text (fusee)
-            SDL_RenderCopy(mainRenderer, sigpatch_hekate, NULL, &rect_hekate); //print de text (hekate)
+            SDL_RenderCopy(mainRenderer, exit2, NULL, &rect_exit2); //print de text (exit)
             SDL_RenderCopy(mainRenderer, title, NULL, &rect_title); //print de text (title)
             SDL_RenderCopy(mainRenderer, description, NULL, &rect_description);
             SDL_RenderCopy(mainRenderer, credit, NULL, &rect_credit);
@@ -372,8 +357,8 @@ int main()
     }
 
     SDL_DestroyTexture(downloadEnd);
+    SDL_DestroyTexture(exit2);
     SDL_DestroyTexture(exit);
-    SDL_DestroyTexture(sigpatch_hekate);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit(); //Quit

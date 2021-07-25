@@ -1,4 +1,4 @@
-#include "../include/reboot.hpp"
+#include <reboot.hpp>
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
