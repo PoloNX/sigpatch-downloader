@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_timer.h>
 #include <switch.h>
 #include <string>
 #include <iostream>
@@ -17,7 +18,7 @@
 #define largeur 1280
 #define longueur 720
 
-void destructTexture (SDL_Texture *sigpatch_fusee, SDL_Texture* updateApp, SDL_Texture* title, SDL_Texture* description, SDL_Texture* credit, SDL_Texture* amsLogo, SDL_Texture* hekateLogo )
+void destructTexture (SDL_Texture *sigpatch_fusee, SDL_Texture* updateApp, SDL_Texture* title, SDL_Texture* description, SDL_Texture* credit, SDL_Texture* amsLogo)
 {
     SDL_DestroyTexture(sigpatch_fusee);
     SDL_DestroyTexture(updateApp);
@@ -25,7 +26,6 @@ void destructTexture (SDL_Texture *sigpatch_fusee, SDL_Texture* updateApp, SDL_T
     SDL_DestroyTexture(description);
     SDL_DestroyTexture(credit);
     SDL_DestroyTexture(amsLogo);
-    SDL_DestroyTexture(hekateLogo);
 }
 
 int main()
@@ -261,7 +261,7 @@ int main()
                         unzipRequests *sessionUnzip = new unzipRequests;
                         sessionUnzip->unzipPatches();
                         downloadIsFinish = 1;
-                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo);
                     }
                 }
 
@@ -284,7 +284,7 @@ int main()
                     else
                     {
                         downloadIsFinish = 1;
-                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo, hekateLogo);
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo);
                     }
                 }
             }
@@ -307,11 +307,14 @@ int main()
             SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
             SDL_RenderCopy(mainRenderer, rebootPayload, NULL, &rect_reboot);
             SDL_RenderCopy(mainRenderer, exit, NULL, &rect_exit);
+            SDL_RenderCopy(mainRenderer, hekateLogo, NULL, &rect_hekateLogo);
         }
 
         else if (downloadIsFinish == 2)
         {
             SDL_RenderCopy(mainRenderer, error, NULL, &rect_error);
+            SDL_Delay(3000);
+            downloadIsFinish = 0;
         }
 
         if (choice == 0 && (downloadIsFinish == 1 || downloadIsFinish == 0)) //Draw cursor on fusee
