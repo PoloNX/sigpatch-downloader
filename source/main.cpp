@@ -53,9 +53,6 @@ int main()
 
     SDL_Surface* sigpatch_fusee_s = TTF_RenderText_Blended(font, "Sigpatchs", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* sigpatch_fusee = SDL_CreateTextureFromSurface (mainRenderer, sigpatch_fusee_s); //We convert the surface to texture
-
-    SDL_Surface* exit2_s = TTF_RenderText_Blended(font, "Exit", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
-    SDL_Texture* exit2 = SDL_CreateTextureFromSurface (mainRenderer, exit2_s); //We convert the surface to texture   
     
     SDL_Surface* rebootPayload_s = TTF_RenderText_Blended(font, "Reboot", SDL_Color {255, 255, 255, 255}); //We create the option for fusee_primary
     SDL_Texture* rebootPayload = SDL_CreateTextureFromSurface (mainRenderer, rebootPayload_s); //We convert the surface to texture   
@@ -138,12 +135,6 @@ int main()
     rect_exit.x = 200;
     rect_exit.y = longueur - 200;
 
-    SDL_Rect rect_exit2;	//Rect exit
-    rect_exit2.w = exit2_s->w;
-    rect_exit2.h = exit2_s->h;
-    rect_exit2.x = 960;
-    rect_exit2.y = longueur - 200;
-
     SDL_Rect rect_updateApp;	//Rect hekate
     rect_updateApp.w = updateApp_s->w;
     rect_updateApp.h = updateApp_s->h;
@@ -187,7 +178,6 @@ int main()
     rect_downloadEnd.y = longueur / 2 - rect_downloadEnd.h / 2;
 
     SDL_FreeSurface(sigpatch_fusee_s); //We Delete Surface
-    SDL_FreeSurface(exit2_s);
     SDL_FreeSurface(title_s);
     SDL_FreeSurface(description_s);
     SDL_FreeSurface(credit_s);
@@ -305,7 +295,7 @@ int main()
         if (downloadIsFinish == 0){
             //render of text
             SDL_RenderCopy(mainRenderer, sigpatch_fusee, NULL, &rect_fusee); //print de text (fusee)
-            SDL_RenderCopy(mainRenderer, exit2, NULL, &rect_exit2); //print de text (exit)
+            SDL_RenderCopy(mainRenderer, exit, NULL, &rect_exit); //print de text (exit)
             SDL_RenderCopy(mainRenderer, title, NULL, &rect_title); //print de text (title)
             SDL_RenderCopy(mainRenderer, description, NULL, &rect_description);
             SDL_RenderCopy(mainRenderer, credit, NULL, &rect_credit);
@@ -356,9 +346,9 @@ int main()
 
     }
 
-    SDL_DestroyTexture(downloadEnd);
-    SDL_DestroyTexture(exit2);
-    SDL_DestroyTexture(exit);
+    //SDL_DestroyTexture(downloadEnd);
+    //SDL_DestroyTexture(exit2);
+    //SDL_DestroyTexture(exit);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit(); //Quit
