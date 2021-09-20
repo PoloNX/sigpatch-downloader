@@ -65,4 +65,6 @@ reboot::reboot()
     fclose(f);
 
     reboot_to_payload();
+ 	spsmInitialize();
+	spsmShutdown(true);
 }
