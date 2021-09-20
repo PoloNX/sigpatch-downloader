@@ -251,7 +251,7 @@ int main()
                     SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;                    
-                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/THZoria/patches/releases/latest/download/patches.zip", false) == false)
+                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/ITotalJustice/patches/releases/latest/download/fusee.zip", false) == false)
                     {
                         downloadIsFinish = 2;
                     }
