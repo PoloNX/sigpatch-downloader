@@ -83,7 +83,7 @@ int main()
     SDL_Surface* amsLogo_s = IMG_Load("data/fusee.png");
     SDL_Texture* amsLogo = SDL_CreateTextureFromSurface(mainRenderer, amsLogo_s);
 
-    SDL_Surface* hekateLogo_s = IMG_Load("data/exit.png");
+    SDL_Surface* hekateLogo_s = IMG_Load("data/hekate.png");
     SDL_Texture* hekateLogo = SDL_CreateTextureFromSurface(mainRenderer, hekateLogo_s); 
 
     SDL_Rect rect_reboot;
@@ -265,9 +265,23 @@ int main()
                     }
                 }
 
-                if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on exit
+                if (event.jbutton.button == 0 && choice == 2 && downloadIsFinish == 0)   //Button A and cursor on hekate
                 {
-                    exit_requested = 1;
+                    SDL_RenderCopy(mainRenderer, download, NULL, &rect_download);
+                    SDL_RenderPresent(mainRenderer);
+                    CurlRequests *sessionCurl = new CurlRequests;                    
+                    if (sessionCurl->downloadFile("patch.zip", "https://github.com/ITotalJustice/patches/releases/latest/download/hekate.zip", false) == false) //We got one error
+                    {
+                        downloadIsFinish = 2; //Go to the step when we print one error
+                    } 
+                    
+                    else
+                    {
+                        unzipRequests *sessionUnzip = new unzipRequests;
+                        sessionUnzip->unzipPatches();
+                        downloadIsFinish = 1; //Haven't error we can print the last step.
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo); 
+                    }
                 }
                 
                 if (event.jbutton.button == 0 && choice == 1 && downloadIsFinish == 0)   //Button A and cursor on app
@@ -276,15 +290,17 @@ int main()
                     SDL_RenderPresent(mainRenderer);
                     CurlRequests *sessionCurl = new CurlRequests;
 
-                    if (sessionCurl->downloadFile("temp.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true) == false)
+                    if (sessionCurl->downloadFile("temp.nro", "https://github.com/PoloNX/sigpatch-downloader/releases/latest/download/sigpatch-downloader.nro", true) == false) //We got one error
                     {
-                        downloadIsFinish = 2;
+                        downloadIsFinish = 2; //Go to the step when we print one error
                     }  
 
                     else
                     {
-                        downloadIsFinish = 1;
-                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo);
+                        unzipRequests *sessionUnzip = new unzipRequests;
+                        sessionUnzip->unzipPatches();
+                        downloadIsFinish = 1; //Haven't error we can print the last step.
+                        destructTexture(sigpatch_fusee, updateApp, title, description, credit, amsLogo); 
                     }
                 }
             }
@@ -303,14 +319,14 @@ int main()
             SDL_RenderCopy(mainRenderer, updateApp, NULL, &rect_updateApp);
 
         }
-        else if (downloadIsFinish == 1){
-            SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd);
+        else if (downloadIsFinish == 1){ //We print all texture when the download is finish
+            SDL_RenderCopy(mainRenderer, downloadEnd, NULL, &rect_downloadEnd); 
             SDL_RenderCopy(mainRenderer, rebootPayload, NULL, &rect_reboot);
             SDL_RenderCopy(mainRenderer, exit, NULL, &rect_exit);
             SDL_RenderCopy(mainRenderer, hekateLogo, NULL, &rect_hekateLogo);
         }
 
-        else if (downloadIsFinish == 2)
+        else if (downloadIsFinish == 2) //We print one error for 3000ms 
         {
             SDL_RenderCopy(mainRenderer, error, NULL, &rect_error);
             SDL_Delay(3000);
@@ -323,7 +339,7 @@ int main()
             SDL_RenderDrawRect(mainRenderer, &rect_cursorAms);
         }
 
-        if (choice == 1) //Draw cursor on hekate
+        if (choice == 1) //Draw cursor on hekate 
         {
             if (downloadIsFinish == 0)
             {
@@ -348,9 +364,6 @@ int main()
 
     }
 
-    //SDL_DestroyTexture(downloadEnd);
-    //SDL_DestroyTexture(exit2);
-    //SDL_DestroyTexture(exit);
     TTF_Quit();
     IMG_Quit();
     SDL_Quit(); //Quit
