@@ -16,7 +16,8 @@
 #include <vector>
 #include <curl/curl.h>
 
-#include "download.hpp"
+#include <download.hpp>
+#include <utils.hpp>
 
 #define Megabytes_in_Bytes	1048576
 #define Kibibyte_in_Bytes	1024
@@ -24,7 +25,6 @@
 #define TIMEOPT CURLINFO_TOTAL_TIME
 #define MINIMAL_PROGRESS_FUNCTIONALITY_INTERVAL     3
 #define STOP_DOWNLOAD_AFTER_THIS_MANY_BYTES         6000
-
 
 int dlnow_Mb = 0;
 int dltotal_Mb = 0;
@@ -44,8 +44,8 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 }
 
 size_t write_data(void *ptr, size_t size, size_t nmemb, void *stream) {
-    string data((const char*) ptr, (size_t) size * nmemb);
-    *((stringstream*) stream) << data;
+    std::string data((const char*) ptr, (size_t) size * nmemb);
+    *((std::stringstream*) stream) << data;
     return size * nmemb;
 }
 
@@ -55,9 +55,14 @@ size_t download_data(void *ptr, size_t size, size_t nmemb, void *stream)
   return written;
 }
 
-CurlRequests::CurlRequests(void){
-    
- };
+CurlRequests::CurlRequests(SDL_Window* window, int horizontal, int vertical, SDL_Renderer* renderer, TTF_Font* font)
+{
+    this->window = window;
+    this->renderer = renderer;
+    this->font = font;
+    this->horizontal = horizontal;
+    this->vertical = vertical;
+}
 
 int xferinfo(curl_off_t dltotal, curl_off_t dlnow) {
 
@@ -79,6 +84,9 @@ int xferinfo(curl_off_t dltotal, curl_off_t dlnow) {
         open_room = false; // opening room
     }
 
+    //utilsRequests utilsProgressBar(window, horizontal, vertical, renderer, font);
+    //utilsProgressBar.printProgressBar(dlnow_Mb, dltotal_Mb, dlspeed);
+
     if (dltotal_Mb == 1) {
         printf("# DOWNLOAD: %" CURL_FORMAT_CURL_OFF_T " Bytes of %" CURL_FORMAT_CURL_OFF_T " Bytes | %3d Kb/s\r", dlnow, dltotal, dlspeed);
     } else if (dltotal_Mb > 1) {
@@ -94,6 +102,12 @@ int xferinfo(curl_off_t dltotal, curl_off_t dlnow) {
     return 0;
 }
 
+
+
+int older_progress(__attribute__((unused)) void* p, double dltotal, double dlnow, __attribute__((unused)) double ultotal, __attribute__((unused)) double ulnow) {
+    return xferinfo((curl_off_t)dltotal, (curl_off_t)dlnow);
+}
+
 struct myprogress {
   TIMETYPE lastruntime;
   CURL *curl;
@@ -101,9 +115,7 @@ struct myprogress {
 char global_f_tmp[512]; /* we need this global FILE variable for passing args */
 
 /* Functions */
-int older_progress(__attribute__((unused)) void *p, double dltotal, double dlnow, __attribute__((unused)) double ultotal, __attribute__((unused)) double ulnow) {
-    return xferinfo((curl_off_t)dltotal, (curl_off_t)dlnow);
-}
+
 
 bool folder_exists(std::string foldername)
     {
@@ -180,6 +192,8 @@ bool CurlRequests::downloadFile(const char *filename, const char *urlPatches, bo
             curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L); 			// skipping cert. verification, if needed
             //curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L); 			// skipping hostname verification, if needed
             curl_easy_setopt(curl, CURLOPT_WRITEDATA, dest);				// writes pointer into FILE *destination
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, older_progress);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, this);
             curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, older_progress);
             curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, &prog);
             curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
